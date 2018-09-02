@@ -12,9 +12,15 @@ class TodoListVC: UITableViewController {
 
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorogon"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: "toDoListArray") as? [String] {
+            itemArray = items
+        }
         
     }
 
@@ -62,12 +68,15 @@ class TodoListVC: UITableViewController {
         }
         //Attaching the action which takes the textfield
         let action = UIAlertAction(title: "Add Item", style: .default){(action) in
-            print(textField.text!)
+            
             self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "toDoListArray")
+            
             self.tableView.reloadData()
         }
         
-        alert.addAction(action)
+        alert.addAction(action) 
         
         present(alert, animated: true, completion: nil)
     }
